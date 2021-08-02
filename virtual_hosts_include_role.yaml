@@ -17,7 +17,6 @@
   hosts: all,&virtual
   strategy: free
   gather_facts: false
-  connection: local
   tasks:
   - name: Launch all job items
     loop: "{{ job_ids }}"
