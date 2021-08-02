@@ -1,0 +1,27 @@
+- name: Prepare work items and create virtual slice hosts
+  hosts: all
+  gather_facts: false
+  tasks:
+  - name: Create virtual slice hosts
+    include_role:
+      name: pisto.virtual_slice_hosts
+    vars:
+      payload_var: job_ids
+      batch: "{{ job_batch_size }}"
+      copy_vars:
+      # copy any desired variable
+      - job_duration_ms_min
+      - job_duration_ms_max
+
+- name: Use run-jobs role in a loop for each virtual slice host
+  hosts: all,&virtual
+  strategy: free
+  gather_facts: false
+  connection: local
+  tasks:
+  - name: Launch all job items
+    loop: "{{ job_ids }}"
+    include_role:
+      name: run-job
+    vars:
+      id: "{{ item }}"

@@ -1,0 +1,4 @@
+- name: Calculate list of job IDs
+  # this is just a list of "{{ inventory_hostname }}-{{ job_id }}"
+  set_fact:
+    job_ids: "{{ [] | zip_longest(range(0, job_count), fillvalue=inventory_hostname) | map('join', '-') | list }}"

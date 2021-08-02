@@ -1,0 +1,12 @@
+- name: Use run-jobs role in a loop
+  hosts: all
+  gather_facts: false
+  roles:
+  - generate-jobs
+  tasks:
+  - name: Launch all job items
+    loop: "{{ job_ids }}"
+    include_role:
+      name: run-job
+    vars:
+      id: "{{ item }}"
